@@ -15,7 +15,7 @@ const Navbar = () => {
           height={500}
           className="w-[30px] h-[30px]"
         />
-        <h3 className="font-[500]">Readers<span className="text-red-500 font-bold ml-1">Hub</span></h3>
+        <h3 className="font-[500]">Readers<span className="text-red-500 font-bold ml-[3px]">Hub</span></h3>
       </div>
 
       <div className="flex gap-3">

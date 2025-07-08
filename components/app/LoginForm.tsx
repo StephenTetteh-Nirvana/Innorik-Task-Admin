@@ -48,13 +48,10 @@ const LoginForm = () => {
             </div>
           </form>
         </CardContent>
-        <CardFooter className="flex-col gap-2">
+        <CardFooter>
           <Button type="submit" className="w-full">
             Login
           </Button>
-          <h2>Don't have an account? 
-              <Link href="/register" className="text-[#2666CF]">  Sign Up</Link>
-          </h2>
         </CardFooter>
       </Card>
     </main>

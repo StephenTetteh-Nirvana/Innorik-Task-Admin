@@ -8,7 +8,7 @@ import {
 
 const DashboardCards = () => {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 px-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 px-4">
       <Card>
         <CardHeader>
           <CardDescription>Total Revenue</CardDescription>
@@ -19,7 +19,7 @@ const DashboardCards = () => {
       </Card>
       <Card>
         <CardHeader>
-          <CardDescription>New Customers</CardDescription>
+          <CardDescription>Total Followers</CardDescription>
           <CardTitle className="font-semibold w-[250px] text-3xl">
             1,234
           </CardTitle>
