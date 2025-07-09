@@ -13,10 +13,9 @@ import type { Books } from "./DataTable"
 
 interface DescriptionPopUp {
   book: Books
-  Id: string
 }
 
-const DescriptionPopUp = ({ Id, book }: DescriptionPopUp) => {
+const DescriptionPopUp = ({ book }: DescriptionPopUp) => {
 
   return (
     <Dialog>

@@ -133,7 +133,7 @@ const DataTable = () => {
               <TableCell>{book.price}.00</TableCell>
               <TableCell>
                 <div>
-                  <DescriptionPopUp Id={book.id} book={book} />
+                  <DescriptionPopUp book={book} />
                 </div>
               </TableCell>
               <TableCell>
