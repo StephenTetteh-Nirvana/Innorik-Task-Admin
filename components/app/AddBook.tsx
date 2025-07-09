@@ -12,61 +12,115 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  RadioGroup,
+  RadioGroupItem,
+} from "@/components/ui/radio-group"
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
+import { formSchema,SchemaErrors } from "@/schema/schema";
+import { toast } from "sonner";
+import { useGlobalState } from "@/context/GlobalState";
+import * as z from "zod/v4"
 
-// import { formSchema } from "@/schema/formSchema";
-// import { toast } from "sonner";
-
-// import type { FormData, SchemaErrors } from "@/schema/formSchema";
-// import * as z from "zod/v4";
-// import DatePicker from "./DatePicker";
-
-// interface AddFarmerProps {
-//   formData: FormData;
-//   setFormData: React.Dispatch<React.SetStateAction<FormData>>;
-// }
 
 const AddBook = () => {
-//   const [errors, setErrors] = useState<SchemaErrors>({});
+  const [errors, setErrors] = useState<SchemaErrors>({});
   const [open, setOpen] = useState(false);
+  const [loading,setLoading] = useState(false)
+  const [newBook,setNewBook] = useState({
+    name: "",
+    category: "",
+    description: "",
+    price: ""
+  })
+
+  const {fetchAllBooks} = useGlobalState()
 
   // function to update formData with values.
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // const { name, value } = e.target;
-    // setFormData((prev) => ({
-    //   ...prev,
-    //   [name]: value,
-    // }));
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setNewBook((prev) => ({
+      ...prev,
+      [name]: name === "price" ? Number(value) : value
+    }));
+
   };
 
   //function to submit the form
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const results = formSchema.safeParse(newBook)
+    if(!results.success){
+       const flattenErrors = z.flattenError(results.error)
+       setErrors(flattenErrors.fieldErrors)
+       return;
+    }
 
-    // const result = formSchema.safeParse(formData);
+    try{
+        setLoading(true)
+       // gets token from localStorage
+      const token = localStorage.getItem("token")
+      const parsedToken = token ? JSON.parse(token) : null
+  
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/Books`,{
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${parsedToken}`
+        },
+        body: JSON.stringify(newBook)
+      })
+      fetchAllBooks() // update the dataTable 
 
-      setTimeout(() => {
-        setOpen(false);
-        clearFields(); // clear fields
-      }, 500);
+      if(res.status === 200){
+        toast("Book Added Successfully",{
+          position: "top-center",
+          action: {
+            label: "OK",
+            onClick: () => console.log("success"),
+          },
+        })
+        
+        setTimeout(() => {
+          setOpen(false);
+          clearFields(); // clear fields
+        }, 500);
+      }else if(res.status === 401){
+        toast("Token is invalid or expired",{
+          position: "top-center",
+          action: {
+            label: "OK",
+            onClick: () => console.log("token expired"),
+          },
+        })
+      }else{
+        toast("An error occured..Please try again later",{
+          position: "top-center",
+          action: {
+            label: "OK",
+            onClick: () => console.log("server error"),
+          },
+        })
+      }
+    }catch(error){
+        console.log(error)
+    }finally{
+        setLoading(false)
+    }
   };
 
   //clear form fields
   const clearFields = () => {
-    // setFormData({
-    //   farmerId: "",
-    //   firstName: "",
-    //   lastName: "",
-    //   region: "",
-    //   district: "",
-    //   contactNumber: "",
-    //   registrationDate: "",
-    //   productsPurchased: [],
-    // });
+    setNewBook({
+      name: "",
+      category: "",
+      price: "",
+      description: ""
+    });
 
-    // setErrors({});
+    setErrors({});
   };
 
   return (
@@ -97,17 +151,17 @@ const AddBook = () => {
           </DialogHeader>
           <div className="grid gap-4 mt-3">
             <div className="grid gap-1.5">
-              <Label htmlFor="Name">Name</Label>
+              <Label htmlFor="name">Name</Label>
               <Input
-                id="Name"
-                name="Name"
+                id="name"
+                name="name"
                 placeholder="The Dilemma Of A Ghost"
-              //   value={formData.firstName}
+                value={newBook.name}
                 onChange={(e) => handleChange(e)}
-              //   className={errors.firstName ? "border border-red-600" : ""}
+                className={errors.name ? "border border-red-600" : ""}
               />
               <span className="text-[12px] text-red-600">
-                {/* {errors && errors.firstName} */}
+                {errors.name && errors.name}
               </span>
             </div>
             
@@ -118,27 +172,32 @@ const AddBook = () => {
                 name="price"
                 placeholder="30"
                 type="number"
-              //   value={formData.lastName}
+                value={newBook.price}
                 onChange={(e) => handleChange(e)}
-              //   className={errors.lastName ? "border border-red-600" : ""}
+                className={errors.price ? "border border-red-600" : ""}
               />
               <span className="text-[12px] text-red-600">
-                {/* {errors && errors.lastName} */}
+                {errors.price && errors.price}
               </span>
             </div>
 
             <div className="grid gap-1.5">
               <Label htmlFor="category">Category</Label>
-              <Input
-                id="category"
-                name="category"
-                placeholder="Horror"
-              //   value={formData.region}
-                onChange={(e) => handleChange(e)}
-              //   className={errors.region ? "border border-red-600" : ""}
-              />
+                <RadioGroup className="mt-3" 
+                  value={newBook.category}
+                  onValueChange={(value)=>{
+                    setNewBook((prev)=> ({...prev, category: value}))
+                  }}
+                >
+                  {["Horror","Mystery","Drama","Ancient"].map((item,index)=>(
+                    <div key={index} className="flex items-center gap-3 text-slate-500">
+                      <RadioGroupItem value={item} id={`r-${item}`}/>
+                      <Label htmlFor={`r-${item}`}>{item}</Label>
+                    </div>
+                  ))}
+                </RadioGroup>
               <span className="text-[12px] text-red-600">
-                {/* {errors && errors.region} */}
+                {errors.category && errors.category}
               </span>
             </div>
 
@@ -148,11 +207,16 @@ const AddBook = () => {
                 id="description"
                 name="description"
                 placeholder="Description of your book"
-                className="w-full h-24 px-2 py-4 border border-gray-300 rounded-md resize-none"
+                className={errors.price ? 
+                  "border border-red-600 w-full h-24 px-2 py-4 rounded-md resize-none" 
+                  : 
+                  'w-full h-24 px-2 py-4 border border-gray-300 rounded-md resize-none'}
+                value={newBook.description}
+                onChange={(e) => handleChange(e)}
               />
 
               <span className="text-[12px] text-red-600">
-                {/* {errors && errors.region} */}
+                {errors.description && errors.description}
               </span>
             </div>
 
@@ -160,7 +224,11 @@ const AddBook = () => {
 
           <DialogFooter className="mt-4">
             <DialogClose onClick={() => clearFields()}></DialogClose>
-            <Button type="submit">Save changes</Button>
+            {!loading ?
+              <Button type="submit">Add</Button>
+              :
+              <Button disabled={true}>Adding...</Button>
+            }
           </DialogFooter>
         </form>
       </DialogContent>

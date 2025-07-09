@@ -10,55 +10,19 @@ import {
 } from "@/components/ui/table";
 
 import { Input } from "@/components/ui/input";
-import { Eye, Trash2 } from "lucide-react";
-import AddBook from "./AddBook";
+import { Trash2 } from "lucide-react";
 import { useState , useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useGlobalState } from "@/context/GlobalState";
+import AddBook from "./AddBook";
 import DescriptionPopUp from "./DescriptionPopUp";
-// import { toast } from "sonner";
-// import type { Farmer } from "@/types/types";
-// import FarmerProductsDisplay from "./FarmerProductsDisplay";
-// import EditFarmer from "./EditFarmer";
-// import AddFarmer from "./AddFarmer";
-
-
-export type Books = {
-  id:string,
-  name:string,
-  category:string,
-  price:number,
-  description:string
-}
 
 const DataTable = () => {
-  const [books, setBooks] = useState<Books[]>([]);
 
-  // const [id, setId] = useState("")
+  const { books, searchResults, setSearchResults, fetchAllBooks } = useGlobalState(); // destructured from context 
+
   const [searchTerm,setSearchTerm] = useState("")
-  const [searchResults,setSearchResults] = useState<Books[]>([])
-
+  
   useEffect(()=>{
-    const fetchAllBooks = async() => {
-      // gets token from localStorage
-      const token = localStorage.getItem("token")
-      const parsedToken = token ? JSON.parse(token) : null
-     
-      // logic that fetches books from backend
-      try{
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/Books`,{
-          headers: {
-            Authorization: `Bearer ${parsedToken}`,
-            "Content-Type": "application/json"
-          }
-        })
-       const responseData = await response.json()
-       setBooks(responseData.data)
-       setSearchResults(responseData.data)
-      }catch(error){
-        console.log(error)
-      }
-    }
-
     fetchAllBooks()
   },[])
 
@@ -68,7 +32,7 @@ const DataTable = () => {
     setSearchTerm(value)
 
     if(value.trim() === ""){
-      setSearchResults(books) // used books arr here because it carries the original data(fallback when after input in searchBar)
+      setSearchResults(books) // used books arr(untouched data) if search is empty
     }else{
       const result = books.filter((b)=> b.name.toLowerCase().includes(value.toLowerCase())) // filters the array based on this condition
       setSearchResults(result)
