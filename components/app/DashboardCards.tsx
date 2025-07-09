@@ -12,7 +12,7 @@ const DashboardCards = () => {
       <Card>
         <CardHeader>
           <CardDescription>Total Revenue</CardDescription>
-          <CardTitle className="font-semibold w-[250px] text-3xl">
+          <CardTitle className="font-[500] w-[250px] text-3xl">
             $1,250.00
           </CardTitle>
         </CardHeader>
@@ -20,7 +20,7 @@ const DashboardCards = () => {
       <Card>
         <CardHeader>
           <CardDescription>Total Followers</CardDescription>
-          <CardTitle className="font-semibold w-[250px] text-3xl">
+          <CardTitle className="font-[500] w-[250px] text-3xl">
             1,234
           </CardTitle>
         </CardHeader>
@@ -28,7 +28,7 @@ const DashboardCards = () => {
       <Card>
         <CardHeader>
           <CardDescription>Total Books</CardDescription>
-          <CardTitle className="font-semibold w-[250px] text-3xl">
+          <CardTitle className="font-[500] w-[250px] text-3xl">
             45
           </CardTitle>
         </CardHeader>
@@ -36,7 +36,7 @@ const DashboardCards = () => {
       <Card>
         <CardHeader>
           <CardDescription>Purchase Rate</CardDescription>
-          <CardTitle className="font-semibold w-[250px] text-3xl">
+          <CardTitle className="font-[500] w-[250px] text-3xl">
             4.5%
           </CardTitle>
           <CardAction>

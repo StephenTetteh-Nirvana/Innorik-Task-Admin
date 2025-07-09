@@ -3,7 +3,8 @@ import DataTable from '@/components/app/DataTable'
 import Navbar from '@/components/app/Navbar'
 import React from 'react'
 
-const Dashboard = () => {
+const Dashboard = async() => {
+
   return (
     <div>
       <Navbar/>

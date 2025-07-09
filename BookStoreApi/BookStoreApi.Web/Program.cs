@@ -8,6 +8,17 @@ using BookStoreApi.Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Allow requests to be made to the backend from the frontend
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("http://localhost:3000") // your Next.js app origin
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
+});
+
 // Add services to the container
 builder.Services.AddDbContext<BookStoreDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -39,8 +50,10 @@ builder.Services.AddScoped<TokenService>();
 
 var app = builder.Build();
 
-app.UseMiddleware<BookStoreApi.Web.Middleware.GlobalExceptionMiddleware>();
+// Enable CORS before any endpoints
+app.UseCors("AllowFrontend");
 
+app.UseMiddleware<BookStoreApi.Web.Middleware.GlobalExceptionMiddleware>();
 
 // Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
@@ -52,12 +65,11 @@ if (app.Environment.IsDevelopment())
     app.UseAuthorization();
 
     app.MapControllers();
-
-
 }
 
 // app.UseHttpsRedirection();
 
+// Being used to create a new admin
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<BookStoreDbContext>();

@@ -8,7 +8,7 @@ namespace BookStoreApi.Web.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize] // Protects all book routes
+    [Authorize]
     public class BooksController : ControllerBase
     {
         private readonly BookStoreDbContext _context;
@@ -20,28 +20,47 @@ namespace BookStoreApi.Web.Controllers
             _logger = logger;
         }
 
-        // GET all books
+        // GET: api/Books
         [HttpGet]
         public IActionResult GetAll()
         {
             _logger.LogInformation("User '{User}' requested all books", User.Identity?.Name);
-            return Ok(_context.Books.ToList());
+            var books = _context.Books.ToList();
+
+            return Ok(new
+            {
+                message = "Books fetched successfully",
+                data = books
+            });
         }
 
-        // POST (create) a new book
+        // POST: api/Books
         [HttpPost]
-        public IActionResult Create(Book book)
+        public IActionResult Create([FromBody] Book book)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new
+                {
+                    message = "Invalid book data",
+                    errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage)
+                });
+            }
+
             _context.Books.Add(book);
             _context.SaveChanges();
 
             _logger.LogInformation("User '{User}' created a new book: {BookName}", User.Identity?.Name, book.Name);
-            return Ok(new { message = "Book created", book });
+            return Ok(new
+            {
+                message = "Book created successfully",
+                data = book
+            });
         }
 
-        // PUT (update) a book
+        // PUT: api/Books/5
         [HttpPut("{id}")]
-        public IActionResult Update(int id, Book updatedBook)
+        public IActionResult Update(int id, [FromBody] Book updatedBook)
         {
             var book = _context.Books.Find(id);
             if (book == null)
@@ -58,10 +77,14 @@ namespace BookStoreApi.Web.Controllers
             _context.SaveChanges();
 
             _logger.LogInformation("User '{User}' updated book ID {Id}", User.Identity?.Name, id);
-            return Ok(new { message = "Book updated", book });
+            return Ok(new
+            {
+                message = "Book updated successfully",
+                data = book
+            });
         }
 
-        // DELETE a book
+        // DELETE: api/Books/5
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
@@ -76,7 +99,7 @@ namespace BookStoreApi.Web.Controllers
             _context.SaveChanges();
 
             _logger.LogInformation("User '{User}' deleted book ID {Id}", User.Identity?.Name, id);
-            return Ok(new { message = "Book deleted" });
+            return Ok(new { message = "Book deleted successfully" });
         }
     }
 }
