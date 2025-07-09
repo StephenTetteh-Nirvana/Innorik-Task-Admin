@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { Pencil } from "lucide-react";
 import {
   Dialog,
   DialogClose,
@@ -18,40 +18,40 @@ import {
 } from "@/components/ui/radio-group"
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { formSchema,SchemaErrors } from "@/schema/schema";
 import { toast } from "sonner";
 import { useGlobalState } from "@/context/GlobalState";
+import { Books } from "@/types/type";
 import * as z from "zod/v4"
 
+type EditBookProps = {
+    bookData: Books
+}
 
-const AddBook = () => {
+
+const EditBook = ({bookData}: EditBookProps) => {
   const [errors, setErrors] = useState<SchemaErrors>({});
   const [open, setOpen] = useState(false);
   const [loading,setLoading] = useState(false)
-  const [newBook,setNewBook] = useState({
-    name: "",
-    category: "",
-    description: "",
-    price: ""
-  })
+  const [book,setBook] = useState<Books>(bookData)
 
   const {fetchAllBooks} = useGlobalState()
 
   // function to update formData with values.
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setNewBook((prev) => ({
+    setBook((prev) => ({
       ...prev,
       [name]: name === "price" ? Number(value) : value
-    }));
+    }))
 
   };
 
   //function to submit the form
   const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const results = formSchema.safeParse(newBook)
+    const results = formSchema.safeParse(book)
     if(!results.success){
        const flattenErrors = z.flattenError(results.error)
        setErrors(flattenErrors.fieldErrors)
@@ -59,23 +59,25 @@ const AddBook = () => {
     }
 
     try{
+      setErrors({})
       setLoading(true)
       // gets token from localStorage
       const token = localStorage.getItem("token")
       const parsedToken = token ? JSON.parse(token) : null
   
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/Books`,{
-        method: "POST",
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/Books/${book.id}`,{
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${parsedToken}`
         },
-        body: JSON.stringify(newBook)
+        body: JSON.stringify(book)
       })
 
       switch (res.status) {
+
         case 200:
-          toast("Book Added Successfully", {
+          toast("Book Updated Successfully", {
             position: "top-center",
             action: {
               label: "OK",
@@ -83,7 +85,12 @@ const AddBook = () => {
             },
         });
   
-        fetchAllBooks(); // update the datatable
+        fetchAllBooks();
+    
+        setTimeout(() => {
+          setOpen(false);
+          // clearFields();
+        }, 500);
         break;
   
         case 401:
@@ -106,50 +113,29 @@ const AddBook = () => {
         });
         break;
       }
-      
     }catch(error){
-      console.log(error)
+        console.log(error)
     }finally{
-      setLoading(false)
+        setLoading(false)
     }
-  };
-
-  //clear form fields
-  const clearFields = () => {
-    setNewBook({
-      name: "",
-      category: "",
-      price: "",
-      description: ""
-    });
-
-    setErrors({});
   };
 
   return (
     <Dialog
       open={open}
       onOpenChange={(isOpen) => {
-        setOpen(isOpen);
-        if (!isOpen) {
-          clearFields(); // Clear form when dialog closes
-        }
+        setOpen(isOpen)
       }}
     >
-      <DialogTrigger
-        className="bg-[#2666CF] rounded-sm flex items-center gap-2 px-2 py-2 w-[200px] sm:w-[150px]
-        text-white hover:bg-[#2666CF] hover:text-white hover:cursor-pointer
-        "
-      >
-        <Plus size={16} />
-        <span className="text-[14px]">Add Book</span>
+      <DialogTrigger>
+        <Pencil size={16}/>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <form onSubmit={(e) => handleSubmit(e)}>
           <DialogHeader>
-            <DialogTitle>Add New Book</DialogTitle>
+            <DialogTitle>Edit Book</DialogTitle>
             <DialogDescription>
-              Enter book information here. Click add when you&apos;re done.
+              Change book information here. Click save when you&apos;re done.
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 mt-3">
@@ -159,7 +145,7 @@ const AddBook = () => {
                 id="name"
                 name="name"
                 placeholder="The Dilemma Of A Ghost"
-                value={newBook.name}
+                value={book.name}
                 onChange={(e) => handleChange(e)}
                 className={errors.name ? "border border-red-600" : ""}
               />
@@ -175,7 +161,7 @@ const AddBook = () => {
                 name="price"
                 placeholder="30"
                 type="number"
-                value={newBook.price}
+                value={book.price}
                 onChange={(e) => handleChange(e)}
                 className={errors.price ? "border border-red-600" : ""}
               />
@@ -187,9 +173,9 @@ const AddBook = () => {
             <div className="grid gap-1.5">
               <Label htmlFor="category">Category</Label>
                 <RadioGroup className="mt-3" 
-                  value={newBook.category}
+                  value={book.category}
                   onValueChange={(value)=>{
-                    setNewBook((prev)=> ({...prev, category: value}))
+                    setBook((prev)=> ({...prev, category: value}))
                   }}
                 >
                   {["Horror","Mystery","Drama","Ancient"].map((item,index)=>(
@@ -214,7 +200,7 @@ const AddBook = () => {
                   "border border-red-600 w-full h-24 px-2 py-4 rounded-md resize-none" 
                   : 
                   'w-full h-24 px-2 py-4 border border-gray-300 rounded-md resize-none'}
-                value={newBook.description}
+                value={book.description}
                 onChange={(e) => handleChange(e)}
               />
 
@@ -226,11 +212,11 @@ const AddBook = () => {
           </div>
 
           <DialogFooter className="mt-4">
-            <DialogClose onClick={() => clearFields()}></DialogClose>
+            {/* <DialogClose onClick={() => clearFields()}></DialogClose> */}
             {!loading ?
-              <Button type="submit">Add</Button>
+              <Button type="submit">Save Changes</Button>
               :
-              <Button disabled={true}>Adding...</Button>
+              <Button disabled={true}>Saving...</Button>
             }
           </DialogFooter>
         </form>
@@ -239,4 +225,4 @@ const AddBook = () => {
   );
 };
 
-export default AddBook;
+export default EditBook;

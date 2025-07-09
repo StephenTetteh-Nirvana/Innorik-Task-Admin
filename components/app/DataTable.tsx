@@ -13,15 +13,17 @@ import { Input } from "@/components/ui/input";
 import { Trash2 } from "lucide-react";
 import { useState , useEffect } from "react";
 import { useGlobalState } from "@/context/GlobalState";
+import { toast } from "sonner";
 import AddBook from "./AddBook";
 import DescriptionPopUp from "./DescriptionPopUp";
+import EditBook from "./EditBook";
 
 const DataTable = () => {
 
   const { books, searchResults, setSearchResults, fetchAllBooks } = useGlobalState(); // destructured from context 
 
   const [searchTerm,setSearchTerm] = useState("")
-  
+
   useEffect(()=>{
     fetchAllBooks()
   },[])
@@ -39,23 +41,51 @@ const DataTable = () => {
     }
   }
 
-//   const deleteFarmerData = (id: string) => {
-//     const filteredData = allFarmers.filter((f: Farmer) => f.farmerId !== id);
-//     setAllFarmers(filteredData);
-//     localStorage.setItem("FarmerData", JSON.stringify(filteredData));
-//     toast("Farmer deleted successfully", {
-//       duration: 2000,
-//       position: "top-center",
-//       action: {
-//         label: "OK",
-//         onClick: () => console.log("deleted"),
-//       },
-//     });
+  const deleteFarmerData = async(id: string) => {
+    const token = localStorage.getItem("token")
+    const parsedToken = token ? JSON.parse(token) : null
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/Books/${id}`,{
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${parsedToken}`
+      }
+    })
 
-//     setTimeout(() => {
-//       window.location.reload();
-//     }, 500);
-//   };
+    switch (res.status) {
+      case 200:
+        toast("Book Deleted Successfully", {
+          position: "top-center",
+          action: {
+            label: "OK",
+            onClick: () => console.log("success"),
+          },
+      });
+
+      fetchAllBooks(); // update the datatable
+      break;
+
+      case 401:
+      toast("Token is invalid or expired", {
+        position: "top-center",
+        action: {
+          label: "OK",
+          onClick: () => console.log("token expired"),
+        },
+      });
+      break;
+
+      default:
+      toast("An error occurred.. Please try again later", {
+        position: "top-center",
+        action: {
+          label: "OK",
+          onClick: () => console.log("server error"),
+        },
+      });
+      break;
+    }
+  };
 
   return (
     <>
@@ -102,17 +132,11 @@ const DataTable = () => {
               </TableCell>
               <TableCell>
                 <div className="flex gap-1.5">
-                  {/* <div onClick={()=> setId(farmer.farmerId)}>
-                  <EditFarmer
-                    farmerID={id}
-                    formData={farmerData}
-                    setFormData={setFarmerData}
-                    />
-                  </div> */}
+                  <EditBook bookData={book}/>
                   <Trash2
                     size={17}
                     className="text-red-600 cursor-pointer"
-                    // onClick={() => deleteFarmerData(farmer.farmerId)}
+                    onClick={() => deleteFarmerData(book.id)}
                   />
                 </div>
               </TableCell>

@@ -9,7 +9,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import type { Books } from "./DataTable"
+import { Books } from "@/types/type"
 
 interface DescriptionPopUp {
   book: Books
@@ -28,8 +28,7 @@ const DescriptionPopUp = ({ book }: DescriptionPopUp) => {
         <DialogHeader>
           <DialogTitle className="text-2xl">{book.name}</DialogTitle>
           <DialogDescription className="flex flex-col gap-1">
-            <h4 className="text-slate-700">Description</h4>
-            <h4 className="text-black">{book.description ? book.description : "No description yet."}</h4>
+            {book.description ? book.description : "No description yet."}
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
