@@ -49,7 +49,7 @@ const LoginForm = () => {
         })
         const data = await res.json();
         localStorage.setItem("token",JSON.stringify(data.token))
-        router.push('/dashboard')
+        router.push('/')
       }else if(res.status === 401){
         toast("Wrong Credentials",{
           position: "top-center",
