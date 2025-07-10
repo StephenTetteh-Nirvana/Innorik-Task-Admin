@@ -25,18 +25,31 @@ A simplified dashboard built with Next Js(Frontend), .NET(Backend) and SQL Serve
 
  ### `BookStoreApi/` - Main Folder(Backend)
   -**`BookStoreApi.Web/`**
-    - **`Controllers/`** — Contains files for controllers
-    - **`Data/`** — Contains files for database context
-    - **`DTOs/`** — Contains LoginDto.cs file that defines the user structure
-    - **`MiddleWare/`** — Contains middleware file for global exception
-    - **`Migrations/`** — Contains migrations for database
-    - **`Models/`** — Contains files that defines the Book and User structure.
-    - **`obj/`** — Contains config files
-    - **`Properties/`** — Contains launchSettings file for settings configuration
-    - **`Services/`** — Contains file that defines Token struture and generation
-    - **`appsettings.Development.json`** — Contains development settings
-    - **`appsettings.json`** — Contains the settings for our backend and connection to database
-    - **`Program.cs`** — Main entry point for our backend
+    - **`Controllers/`** 
+      Contains files for controllers
+    - **`Data/`** 
+      Contains files for database context
+    - **`DTOs/`** 
+      Contains LoginDto.cs file that defines the user structure
+    - **`MiddleWare/`** 
+      Contains middleware file for global exception
+    - **`Migrations/`** 
+      Contains migrations for database
+    - **`Models/`** 
+      Contains files that defines the Book and User structure.
+    - **`obj/`**  
+      Contains config files
+    - **`Properties/`** 
+      Contains launchSettings file for settings configuration
+    - **`Services/`**  
+      Contains file that defines Token struture and generation
+    - **`appsettings.Development.json`**  
+      Contains development settings
+    - **`appsettings.json`**  
+      Contains the settings for our backend and connection to database
+    - **`Program.cs`** 
+       Main entry point for our backend
+
 
 - **`components/`**  
   Reusable NextJS/Shadcn components.  
@@ -118,7 +131,7 @@ Before you begin, ensure you have the following installed:
      ```
 
 5. **Start the server (BackEnd)**
-  Optional - you can connect to SQL Server Management Studio to view tables.
+  - Optional - you can connect to SQL Server Management Studio to view tables.
 
    ```bash
    dotnet run 
