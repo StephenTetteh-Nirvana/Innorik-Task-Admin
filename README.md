@@ -24,7 +24,7 @@ A simplified dashboard built with Next Js(Frontend), .NET(Backend) and SQL Serve
 
 
  ### `BookStoreApi/` - Main Folder(Backend)
-  -**`BookStoreApi.Web/`**
+  - **`BookStoreApi.Web/`**
     - **`Controllers/`** 
       Contains files for controllers
     - **`Data/`** 
