@@ -127,7 +127,7 @@ const EditBook = ({bookData}: EditBookProps) => {
         setOpen(isOpen)
       }}
     >
-      <DialogTrigger>
+      <DialogTrigger className="cursor-pointer">
         <Pencil size={16}/>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
@@ -179,8 +179,8 @@ const EditBook = ({bookData}: EditBookProps) => {
                   }}
                 >
                   {["Horror","Mystery","Drama","Ancient"].map((item,index)=>(
-                    <div key={index} className="flex items-center gap-3 text-slate-500">
-                      <RadioGroupItem value={item} id={`r-${item}`}/>
+                    <div key={index} className="flex items-center gap-3">
+                      <RadioGroupItem value={item} id={`r-${item}`} className="border border-black"/>
                       <Label htmlFor={`r-${item}`}>{item}</Label>
                     </div>
                   ))}
@@ -196,10 +196,10 @@ const EditBook = ({bookData}: EditBookProps) => {
                 id="description"
                 name="description"
                 placeholder="Description of your book"
-                className={errors.price ? 
-                  "border border-red-600 w-full h-24 px-2 py-4 rounded-md resize-none" 
+                className={errors.description ? 
+                  "border border-red-600 w-full h-24 px-2 py-4 rounded-md resize-none text-sm" 
                   : 
-                  'w-full h-24 px-2 py-4 border border-gray-300 rounded-md resize-none'}
+                  'w-full h-24 px-2 py-4 border border-gray-300 rounded-md resize-none text-sm'}
                 value={book.description}
                 onChange={(e) => handleChange(e)}
               />
