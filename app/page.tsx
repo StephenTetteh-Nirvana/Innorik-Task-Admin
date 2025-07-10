@@ -12,23 +12,25 @@ import DashboardCards from '@/components/app/DashboardCards'
 import DataTable from '@/components/app/DataTable'
 import Navbar from '@/components/app/Navbar'
 import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 const Home = () => {
   const router = useRouter()
-
-  const token = localStorage.getItem("token")
-  const parsedToken = token ? JSON.parse(token) : null
+  const [validToken,setValidToken] = useState(false)
 
   useEffect(() => {
+    const token = localStorage.getItem("token") || null
+    const parsedToken = token ? JSON.parse(token) : null
     if (!parsedToken) {
+      setValidToken(false)
      router.push('/login')
     } else {
+      setValidToken(true)
       router.push('/')
     }
   }, [])
 
-  if(!parsedToken){
+  if(!validToken){
     return (
       <div className="w-full h-[100vh] flex items-center justify-center bg-slate-300">
         <Card className="w-full max-w-md">
