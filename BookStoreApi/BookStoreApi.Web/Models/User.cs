@@ -8,3 +8,4 @@ namespace BookStoreApi.Web.Models
         public string Role { get; set; }  // E.g., Admin, Customer
     }
 }
+

@@ -10,7 +10,6 @@ const Navbar = () => {
 
   // clear localStorage and redirect back to login
   const logOut = () => {
-    localStorage.clear()
     router.push('/login')
     toast("You logged out",{
       duration: 1500,
@@ -20,6 +19,7 @@ const Navbar = () => {
         onClick: () => console.log("success"),
       },
     })
+    localStorage.clear()
   }
 
   return (

@@ -23,7 +23,7 @@ const DashboardCards = () => {
         <CardHeader>
           <CardDescription>Total Revenue</CardDescription>
           <CardTitle className="font-[500] w-[250px] text-3xl">
-            ${books.reduce((total,book) => total + book.price,0)}.00
+            ${books.length > 0 ? books.reduce((total,book) => total + book.price,0) : 0}.00
           </CardTitle>
         </CardHeader>
       </Card>
@@ -39,7 +39,7 @@ const DashboardCards = () => {
         <CardHeader>
           <CardDescription>Total Books</CardDescription>
           <CardTitle className="font-[500] w-[250px] text-3xl">
-            {books.length}
+            {books.length > 0 ? books.length : 0}
           </CardTitle>
         </CardHeader>
       </Card>

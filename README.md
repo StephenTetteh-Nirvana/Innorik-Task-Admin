@@ -1,6 +1,6 @@
 # Innorik Programming task
 
-A simplified dashboard built with Next Js(Frontend), .NET(Backend) and SQL Server(Database) that displays bookStore information.
+A simplified dashboard built with Next Js(Frontend), .NET(Backend) and SQL Server Express (Database) that displays bookStore information.
 
 ## Login Credentials
  Make sure the admin user is seeded via `Program.cs` on startup, or create it manually in SQL Server:
@@ -79,7 +79,7 @@ A simplified dashboard built with Next Js(Frontend), .NET(Backend) and SQL Serve
 
 - **Framework**: .NET
 - **Language**: C#
-- **Database**: SQL SERVER
+- **Database**: SQL SERVER EXPRESS
 
 
 ## Prerequisites
@@ -89,7 +89,7 @@ Before you begin, ensure you have the following installed:
 - Node.js (v20 or higher)
 - Node package manager(Npm) - comes with node js
 - .NET (v8)
-- SQL SERVER 
+- SQL SERVER EXPRESS
 - SQL Server Management Studio — View/manage database tables visually (optional)
 
 ## Getting Started

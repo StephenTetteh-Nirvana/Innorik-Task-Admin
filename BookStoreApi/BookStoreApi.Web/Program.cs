@@ -73,16 +73,21 @@ if (app.Environment.IsDevelopment())
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<BookStoreDbContext>();
+
+    context.Database.Migrate();
+
     var hasher = new PasswordHasher<User>();
 
     if (!context.Users.Any(u => u.Username == "admin"))
     {
-        var user = new User
+      var user = new User
         {
-            Username = "Admin",
-            Role = "Admin",
-            PasswordHash = hasher.HashPassword(null, "admin123")
+            Username = "admin",
+            Role = "Admin"
         };
+
+        user.PasswordHash = hasher.HashPassword(user, "admin123");
+
         context.Users.Add(user);
         context.SaveChanges();
     }
