@@ -22,36 +22,7 @@ A simplified dashboard built with Next Js(Frontend), .NET(Backend) and SQL Serve
  - `layout.tsx`: Root layout for shared UI and layouts across the app. 
  - `page.tsx`: Entry point for index route. 
 
-
- ### `BookStoreApi/` - Main Folder(Backend)
-  - **`BookStoreApi.Web/`**
-    - **`Controllers/`** 
-      Contains files for controllers
-    - **`Data/`** 
-      Contains files for database context
-    - **`DTOs/`** 
-      Contains LoginDto.cs file that defines the user structure
-    - **`MiddleWare/`** 
-      Contains middleware file for global exception
-    - **`Migrations/`** 
-      Contains migrations for database
-    - **`Models/`** 
-      Contains files that defines the Book and User structure.
-    - **`obj/`**  
-      Contains config files
-    - **`Properties/`** 
-      Contains launchSettings file for settings configuration
-    - **`Services/`**  
-      Contains file that defines Token struture and generation
-    - **`appsettings.Development.json`**  
-      Contains development settings
-    - **`appsettings.json`**  
-      Contains the settings for our backend and connection to database
-    - **`Program.cs`** 
-       Main entry point for our backend
-
-
-- **`components/`**  
+ - **`components/`**  
   Reusable NextJS/Shadcn components.  
   - `app/`: NextJs components(Client/Server) for the entire app.
   - `ui/`: UI primitives powered by Shadcn (e.g., Button, Dialog, Input).  
@@ -70,6 +41,24 @@ A simplified dashboard built with Next Js(Frontend), .NET(Backend) and SQL Serve
 
   - **`types/`**  
 - Exports types, this makes the code clean.
+
+
+ ### `BookStoreApi/` - Main Folder(Backend)
+  - **`BookStoreApi.Web/`**
+    - **`Controllers/`** - Contains files for controllers
+    - **`Data/`** - Contains files for database context
+    - **`DTOs/`** - Contains LoginDto.cs file that defines the user structure
+    - **`MiddleWare/`** - Contains middleware file for global exception
+    - **`Migrations/`** - Contains migrations for database
+    - **`Models/`** - Contains files that defines the Book and User structure.
+    - **`obj/`** - Contains config files
+    - **`Properties/`** - Contains launchSettings file for settings configuration
+    - **`Services/`** - Contains file that defines Token struture and generation
+    - **`appsettings.Development.json`** - Contains development settings
+    - **`appsettings.json`** - Contains the settings for our backend and connection to database
+    - **`Program.cs`** - Main entry point for our backend
+
+
 
 ### Other Key Files
 
