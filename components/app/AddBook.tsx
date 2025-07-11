@@ -83,8 +83,9 @@ const AddBook = () => {
             },
         });
   
-        fetchAllBooks(); // update the datatable
-        setOpen(false)
+        fetchAllBooks() // update the datatable
+        clearFields() // clear fields
+        setOpen(false) // close the popup
         break;
   
         case 401:
@@ -132,9 +133,9 @@ const AddBook = () => {
       open={open}
       onOpenChange={(isOpen) => {
         setOpen(isOpen);
-        if (!isOpen) {
-          clearFields(); // Clear form when dialog closes
-        }
+        // if (!isOpen) {
+        //   clearFields(); // Clear form when dialog closes
+        // }
       }}
     >
       <DialogTrigger

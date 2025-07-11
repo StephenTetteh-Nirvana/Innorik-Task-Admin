@@ -11,7 +11,7 @@ import {
 
 import { Input } from "@/components/ui/input";
 import { Trash2 } from "lucide-react";
-import { useState , useEffect } from "react";
+import { useEffect } from "react";
 import { useGlobalState } from "@/context/GlobalState";
 import { toast } from "sonner";
 import AddBook from "./AddBook";
@@ -20,28 +20,36 @@ import EditBook from "./EditBook";
 
 const DataTable = () => {
 
-  const { books, searchResults, setSearchResults, fetchAllBooks } = useGlobalState(); // destructured from context 
+  const { 
+    books, 
+    searchTerm, 
+    setSearchTerm, 
+    searchResults, 
+    setSearchResults, 
+    fetchAllBooks } = useGlobalState(); // destructured from context 
 
-  const [searchTerm,setSearchTerm] = useState("")
+    // function to handle search 
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value)
+  }
+
+  //Update search results whenever it updates
+  useEffect(() => {
+    if (searchTerm.trim() === "") {
+      setSearchResults(books)
+    } else {
+      const filtered = books.filter((b) =>
+        b.name.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+      setSearchResults(filtered)
+    }
+  }, [searchTerm, books])
 
   useEffect(()=>{
     fetchAllBooks()
   },[])
-
-  // function to handle search 
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const {value} = e.target
-    setSearchTerm(value)
-
-    if(value.trim() === ""){
-      setSearchResults(books) // used books arr(untouched data) if search is empty
-    }else{
-      const result = books.filter((b)=> b.name.toLowerCase().includes(value.toLowerCase())) // filters the array based on this condition
-      setSearchResults(result)
-    }
-  }
-
-  const deleteFarmerData = async(id: string) => {
+  
+  const deleteBook = async(id: string) => {
     const token = localStorage.getItem("token")
     const parsedToken = token ? JSON.parse(token) : null
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/Books/${id}`,{
@@ -51,7 +59,7 @@ const DataTable = () => {
         Authorization: `Bearer ${parsedToken}`
       }
     })
-
+    
     switch (res.status) {
       case 200:
         toast("Book Deleted Successfully", {
@@ -86,7 +94,7 @@ const DataTable = () => {
       break;
     }
   };
-
+  
   return (
     <>
       <div className="flex flex-col gap-2">
@@ -136,7 +144,7 @@ const DataTable = () => {
                   <Trash2
                     size={17}
                     className="text-red-600 cursor-pointer"
-                    onClick={() => deleteFarmerData(book.id)}
+                    onClick={() => deleteBook(book.id)}
                   />
                 </div>
               </TableCell>
