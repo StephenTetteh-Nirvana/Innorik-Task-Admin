@@ -108,6 +108,9 @@ Before you begin, ensure you have the following installed:
    npm install
    ```
 3. **Start the development server (FrontEnd)**
+ - Create a .env.local file in the root of the app with the following variable:
+   - NEXT_PUBLIC_API_URL=http://localhost:5017 - allows you to access backend.
+   
    ```bash
    npm run dev 
    ```
