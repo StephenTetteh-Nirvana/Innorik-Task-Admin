@@ -3,7 +3,7 @@
 A simplified dashboard built with Next Js(Frontend), .NET(Backend) and SQL Server Express (Database) that displays bookStore information.
 
 ## Login Credentials
- Make sure the admin user is seeded via `Program.cs` on startup, or create it manually in SQL Server:
+ Make sure the admin user is seeded via `Program.cs` on startup, or create it manually in SQL Server Express:
 
   Use the credentials below to log in to the admin account:
  - Username: `admin`
@@ -80,6 +80,7 @@ A simplified dashboard built with Next Js(Frontend), .NET(Backend) and SQL Serve
 - **Framework**: .NET
 - **Language**: C#
 - **Database**: SQL SERVER EXPRESS
+- **ORM**: Entity Framework
 
 
 ## Prerequisites
@@ -88,7 +89,7 @@ Before you begin, ensure you have the following installed:
 
 - Node.js (v20 or higher)
 - Node package manager(Npm) - comes with node js
-- .NET (v8)
+- .NET (v8.0.411)
 - SQL SERVER EXPRESS
 - SQL Server Management Studio — View/manage database tables visually (optional)
 
