@@ -145,4 +145,4 @@ Before you begin, ensure you have the following installed:
 
 ## Support
 
-For support and questions, please refer to the project documentation.
+For support and questions, please refer to the project documentation./
