@@ -122,7 +122,7 @@ Before you begin, ensure you have the following installed:
 
 5. **Start the server (BackEnd)**
   - Optional - you can connect to SQL Server Management Studio to view tables.
-  NB: Please make sure the frontend is running on port 3000, by default it should be port 3000 but if you have a server running that port please close that first.
+  - Please make sure the frontend is running on port 3000, by default it should be port 3000 but if you have a server running that port please close that first.
 
    ```bash
    dotnet run 
